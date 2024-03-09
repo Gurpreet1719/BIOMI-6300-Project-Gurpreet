@@ -1,8 +1,0 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-*.fastq.gz
-*/*.fastq.gz
-*/*/*.fastq.gz
-*/*/*/*.fastq.gz
