@@ -40,6 +40,7 @@ pacman::p_load(tidyverse, devtools, patchwork, iNEXT, phyloseq,
 
 ## Load in Data 
 ```{r load-data}
+
 load("data/02_PreProcessing/raw_preprocessed_physeq.RData")
 raw_preprocessed_physeq
 
@@ -91,16 +92,17 @@ iNEXT_input_df <-
   data.frame()
 
 # Quick check
+
 dim(iNEXT_input_df)
 
 # Run iNEXT: Calculate the Hill Numbers 
 # Note that: Species in ROWS, Samples in COLUMNS 
 # Remember to set the seed! 
-iNEXT_data <- iNEXT(iNEXT_input_df, 
-                    q = c(0,1,2), datatype = "abundance")
+#iNEXT_data <- iNEXT(iNEXT_input_df, 
+                    #q = c(0,1,2), datatype = "abundance")
 
 # Save the file
-save(iNEXT_data, file = "data/04_Biodiversity/iNEXT_data.RData")
+#save(iNEXT_data, file = "data/04_Biodiversity/iNEXT_data.RData")
 ```
 
 # Evaluate the Diversity! 
