@@ -57,20 +57,20 @@ head(metadata_df)
 # Setting colors for treatments
 treatment_colors <- c(
   "N0-1" = "dodgerblue4",
-  "N0-5" = "dodgerblue4",
-  "N0-10" = "dodgerblue4",
-  "N120-1" = "dodgerblue2",
-  "N120-5" = "dodgerblue2",
-  "N120-10" = "dodgerblue2",
-  "N180-1" = "#D9CC3C",
-  "N180-5" = "#D9CC3C",
-  "N180-10" = "#D9CC3C",
-  "N240-1" = "#A0E0BA",
-  "N240-5" = "#A0E0BA",
-  "N240-10" = "#A0E0BA",
-  "N360-1" = "#00ADA7",
-  "N360-5" = "#00ADA7",
-  "N360-10" = "#00ADA7")
+  "N0-5" = "deepskyblue2",
+  "N0-10" = "cyan",
+  "N120-1" = "brown3",
+  "N120-5" = "brown1",
+  "N120-10" = "darkorange",
+  "N180-1" = "darkolivegreen4",
+  "N180-5" = "darkolivegreen3",
+  "N180-10" = "darkolivegreen1",
+  "N240-1" = "deeppink4",
+  "N240-5" = "deeppink3",
+  "N240-10" = "deeppink",
+  "N360-1" = "goldenrod4",
+  "N360-5" = "goldenrod2",
+  "N360-10" = "gold")
 
 ```
 
@@ -126,7 +126,7 @@ colnames(color_df)[1] <- "names"
 head(color_df)
 
 
-# Make a helper dataframe for plotting with colors 
+# Make a helper data frame for plotting with colors 
 iNEXT_color_df <- 
   color_df %>%
   # Fix the names for merging
@@ -153,14 +153,14 @@ iNEXT_color_df <-
   # 1 = Exponential Shannon / Number of "Common" taxa
   # 2 = Inverse Simpson / Number of "Dominant" taxa 
 
-ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
-  facet_wrap(~Order.q, scales = "fixed") + 
-  scale_shape_manual(values = base::rep(17, nsamples(raw_preprocessed_physeq)),
-                     guide = TRUE) +
-  labs(x = "Number of Sequences (Library Size)", 
-       y = "Effective Number of ASVs") + 
-  theme_bw() + 
-  theme(legend.position = "none")
+#ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
+ # facet_wrap(~Order.q, scales = "fixed") + 
+  #scale_shape_manual(values = base::rep(17, nsamples(raw_preprocessed_physeq)),
+                     #guide = TRUE) +
+  #labs(x = "Number of Sequences (Library Size)", 
+       #y = "Effective Number of ASVs") + 
+  #theme_bw() + 
+  #theme(legend.position = "none")
 
 
 ```
@@ -205,6 +205,15 @@ iNEXT_manual_df %>%
         axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
         legend.title = element_blank()) 
 ```
+
+**Interpretation**
+From the plots above,
+
+Richness > Shannon > Simpson
+
+The effective number of ASVs were higher for N0-5, N120-5, N180-1, N240-5 and N360-1. Similar trend was observed for Shannon and Simpson diversity index. The richness measure of diversity is more sensitive to sequencing depth and compared to Shannon and Simpson indices. Since, this plot was plotted was manually plotted, the axes were different for each of the diversity measure and it seems that the curves plateaued as: Simpson > Shannon > Richness.
+
+
 
 # Boxplots of Diversity 
 
@@ -253,3 +262,5 @@ obs_div_df %>%
         legend.title = element_blank())
 ```
 
+**Interpretation**
+The treatment that had the highest effective number of ASVs was N240 after 5 years of application whereas the lowest was N0 in the first year of application. One interesting thing that I observed for the Simpson measure was the trend in N360 being 1st yr > 10th yr > 5th year which different than that observed for richness and Shannon measure as : 1st yr > 5th yr > 10th.
