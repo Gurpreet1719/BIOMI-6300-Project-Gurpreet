@@ -57,21 +57,11 @@ head(metadata_df)
 
 # Setting colors for treatments
 treatment_colors <- c(
-  "N0-1" = "dodgerblue4",
-  "N0-5" = "deepskyblue2",
-  "N0-10" = "cyan",
-  "N120-1" = "brown3",
-  "N120-5" = "brown1",
-  "N120-10" = "darkorange",
-  "N180-1" = "darkolivegreen4",
-  "N180-5" = "darkolivegreen3",
-  "N180-10" = "darkolivegreen1",
-  "N240-1" = "deeppink4",
-  "N240-5" = "deeppink3",
-  "N240-10" = "deeppink",
-  "N360-1" = "goldenrod4",
-  "N360-5" = "goldenrod2",
-  "N360-10" = "gold")
+  "N0" = "dodgerblue4",
+  "N120" = "brown3",
+  "N180" = "darkolivegreen4",
+  "N240" = "deeppink4",
+  "N360" = "goldenrod4")
 
 ```
 
@@ -99,7 +89,7 @@ dim(iNEXT_input_df)
 # Note that: Species in ROWS, Samples in COLUMNS 
 # Remember to set the seed! 
 #iNEXT_data <- iNEXT(iNEXT_input_df, 
-                    #q = c(0,1,2), datatype = "abundance")
+                   # q = c(0,1,2), datatype = "abundance")
 
 # Save the file
 #save(iNEXT_data, file = "data/04_Biodiversity/iNEXT_data.RData")
@@ -138,8 +128,8 @@ iNEXT_color_df <-
   left_join(metadata_df, by = "names") %>%
   # Merge with colors for plotting with ggiNEXT
   left_join(data.frame(treatment_colors = treatment_colors,
-                       samply_type = names(treatment_colors)),
-             by = c("names" = "samply_type"))  # Corrected variable name for joining
+                       treatment = names(treatment_colors)),
+             by = c("names" = "treatment"))  # Corrected variable name for joining
 
 ```
 
@@ -156,11 +146,11 @@ iNEXT_color_df <-
   # 2 = Inverse Simpson / Number of "Dominant" taxa 
 
 #ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
- # facet_wrap(~Order.q, scales = "fixed") + 
+ #facet_wrap(~Order.q, scales = "fixed") + 
   #scale_shape_manual(values = base::rep(17, nsamples(raw_preprocessed_physeq)),
-                     #guide = TRUE) +
+                   # guide = TRUE) +
   #labs(x = "Number of Sequences (Library Size)", 
-       #y = "Effective Number of ASVs") + 
+      # y = "Effective Number of ASVs") + 
   #theme_bw() + 
   #theme(legend.position = "none")
 
@@ -183,26 +173,26 @@ iNEXT_manual_df <-
   left_join(., metadata_df, by = "names") %>%
   # Add colors to data frame
   left_join(., data.frame(treatment_colors = treatment_colors,
-                          sample_type = names(treatment_colors)),
-            by = "sample_type") 
+                         treatment = names(treatment_colors)),
+              by = "treatment") 
 # Inspect 
 dim(iNEXT_manual_df)
 str(iNEXT_manual_df)
 
 # Plot it - Rarefaction Curve 
 iNEXT_manual_df %>%
-  # Filter out rows that are calcaulted by rarefaction from iNEXT
+  # Filter out rows that are calculated by rarefaction from iNEXT
   dplyr::filter(Method == "Rarefaction") %>%
   # Now, let's draw the plot, be sure to group by the samples if using geom_line!
-  ggplot(aes(x = m, y= qD, color = sample_type, group = names)) + 
+  ggplot(aes(x = m, y= qD, color = treatment, group = names)) + 
   geom_line() + 
   # Facet with the station to see the samples better 
-  facet_grid(Order.q~sample_type, scales = "free") + 
+  facet_grid(Order.q~treatment, scales = "free") + 
   scale_color_manual(values = treatment_colors) + 
   labs(x = "Number of Sequences (Library Size)", 
        y = "Effective Number of ASVs") + 
   theme_bw() + 
-  #guides(color = guide_legend(nrow = 2, byrow = TRUE)) + 
+  guides(color = guide_legend(nrow = 2, byrow = TRUE)) + 
   theme(legend.position = "bottom",
         axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
         legend.title = element_blank()) 
@@ -223,25 +213,17 @@ Now, let's zoom in on a bit of a better view of the data by visualizing it in a 
 
 ```{r div-dfs}
 # Prettier station labels 
-treatment_names <- c("N0-1", "N0-5","N0-10",
-                   "N120-1", "N120-5", "N120-10",
-                  "N180-1", "N180-5", "N180-10",
-                  "N240-1", "N240-5", "N240-10",
-                  "N360-1", "N360-5", "N360-10")
+treatment_names <- c("N0", "N120", "N180", "N240","N360")
 
-names(treatment_names) <- c("N0-1", "N0-5","N0-10",
-                   "N120-1", "N120-5", "N120-10",
-                  "N180-1", "N180-5", "N180-10",
-                  "N240-1", "N240-5", "N240-10",
-                  "N360-1", "N360-5", "N360-10")
+names(treatment_names) <- c("N0", "N120", "N180", "N240","N360")
 
 # Make a dataframe
 obs_div_df <- 
   iNEXT_manual_df %>%
   dplyr::filter(Method == "Observed") %>%
   left_join(data.frame(treatment_names = treatment_names, 
-                      sample_type = names(treatment_names)), 
-                       by = "sample_type")
+                      treatment = names(treatment_names)), 
+                       by = "treatment")
 
 # Check it 
 head(obs_div_df)
@@ -251,7 +233,7 @@ head(obs_div_df)
 ```{r div-boxplot, fig.height = 3.5, fig.width = 9}
 # Boxplots by station 
 obs_div_df %>%
-  ggplot(aes(x = treatment_names, y = qD, fill = sample_type, color = sample_type)) + 
+  ggplot(aes(x = treatment_names, y = qD, fill = treatment, color = treatment)) + 
   facet_wrap(~Order.q, scales = "free") + 
   geom_jitter(size = 2.5) + 
   geom_boxplot(alpha = 0.5, outlier.shape = NA) + 
