@@ -110,8 +110,13 @@ is.rooted(midpoint_rooted_tree)
 
 # Merge tree with the new physeq
 midroot_physeq <- 
-  merge_phyloseq(unrooted_physeq, midpoint_rooted_tree)
+  merge_phyloseq(raw_preprocessed_physeq, midpoint_rooted_tree)
 midroot_physeq
+
+
+# Quick inspection of tree 
+ggtree(midroot_physeq) + 
+  geom_tippoint(mapping = aes(color = Kingdom))
 
 ```
 

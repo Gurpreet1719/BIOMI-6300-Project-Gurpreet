@@ -109,27 +109,29 @@ typeof(iNEXT_data)
 color_df <- 
   iNEXT_input_df %>%
   colnames() %>%
-  data.frame()
+  data.frame() 
 # Check
 head(color_df)
 # Rename the column 
 colnames(color_df)[1] <- "names"
 # Check
 head(color_df)
-
+color_df <- color_df %>%
+  add_row(names = "SRR11364374")
 
 # Make a helper data frame for plotting with colors 
 iNEXT_color_df <- 
   color_df %>%
   # Fix the names for merging
-  mutate(names = gsub(names, pattern = "[.]", replace = "-"),
-         names = gsub(names, pattern = "X",  replace = "")) %>%
+  #mutate(names = gsub(names, pattern = "[.]", replace = "-"),
+         #names = gsub(names, pattern = "X",  replace = "")) %>%
   # Merge with metadata
   left_join(metadata_df, by = "names") %>%
   # Merge with colors for plotting with ggiNEXT
   left_join(data.frame(treatment_colors = treatment_colors,
-                       treatment = names(treatment_colors)),
-             by = c("names" = "treatment"))  # Corrected variable name for joining
+                       treatment = names(treatment_colors))) %>%
+  mutate(treatment_colors = ifelse(is.na(treatment_colors), "red", treatment_colors))
+            # by = c("names" = "treatment"))  # Corrected variable name for joining
 
 ```
 
@@ -145,14 +147,17 @@ iNEXT_color_df <-
   # 1 = Exponential Shannon / Number of "Common" taxa
   # 2 = Inverse Simpson / Number of "Dominant" taxa 
 
-#ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
- #facet_wrap(~Order.q, scales = "fixed") + 
-  #scale_shape_manual(values = base::rep(17, nsamples(raw_preprocessed_physeq)),
-                   # guide = TRUE) +
-  #labs(x = "Number of Sequences (Library Size)", 
-      # y = "Effective Number of ASVs") + 
-  #theme_bw() + 
-  #theme(legend.position = "none")
+ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") +
+ facet_wrap(~Order.q, scales = "fixed") + 
+  scale_color_manual(values = iNEXT_color_df$treatment_colors, guide = FALSE) +
+  scale_fill_manual(values = iNEXT_color_df$treatment_colors, guide = FALSE) +
+  scale_shape_manual(values = rep(1, 60), guide = FALSE)
+  # scale_shape_manual(values = base::rep(17, nsamples(raw_preprocessed_physeq)),
+  #                  guide = TRUE) +
+  labs(x = "Number of Sequences (Library Size)", 
+       y = "Effective Number of ASVs") + 
+  theme_bw() + 
+  theme(legend.position = "none")
 
 
 ```
@@ -169,12 +174,18 @@ iNEXT_manual_df <-
   # Fix the samples names 
   mutate(names = gsub(names, pattern = "[.]", replace = "-"),
          names = gsub(names, pattern = "X", replace = "")) %>%
+  filter(names != "SRR11364374") %>%
   # join with metadata 
   left_join(., metadata_df, by = "names") %>%
   # Add colors to data frame
   left_join(., data.frame(treatment_colors = treatment_colors,
                          treatment = names(treatment_colors)),
               by = "treatment") 
+
+unique(iNEXT_manual_df$treatment)
+iNEXT_manual_df %>%
+  filter(is.na(treatment))
+
 # Inspect 
 dim(iNEXT_manual_df)
 str(iNEXT_manual_df)
