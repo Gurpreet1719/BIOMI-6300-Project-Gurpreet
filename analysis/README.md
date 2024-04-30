@@ -12,3 +12,4 @@ The analysis folder consists of .Rmd and html files for:
 		05_Community_Analysis.Rmd
 		05_Community_Analysis.html 
 
+I have made changes in 01_DADA2.Rmd. Since it takes long to knit the file, I have not updated the html file. Please consider my rmd for interpretations, rest of the file is same.
