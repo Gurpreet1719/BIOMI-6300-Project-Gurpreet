@@ -56,7 +56,7 @@ treatment_colors <- c(
   "N0" = "brown3",
   "N120" = "dodgerblue4",
   "N180" = "darkolivegreen4",
-  "N240" = "goldenrod4",
+  "N240" = "gold",
   "N360" = "deeppink4")
 ```
 
@@ -458,9 +458,22 @@ phylum_df %>%
   scale_fill_manual(values = phylum_colors) + 
   theme_bw() + 
   theme(axis.text.x = element_blank())
+
+## Make each phyla it's own row 
+phylum_df %>%
+  # Warning: It's important to have one sample per x value, 
+  # otherwise, it will take the sum between multiple samples
+  ggplot(aes(x = treatment, y = Abundance, fill = Phylum)) + 
+  facet_grid(Phylum~year, scale = "free") + 
+  geom_bar(stat = "identity") + 
+  labs(title = "Phylum Composition") + 
+  scale_fill_manual(values = phylum_colors) + 
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+        strip.text.y = element_text(size = 10 )) 
 ```
 
-```{r phylum-station-actinobacteria, fig.width=5, fig.height=3.5}
+```{r phylum-treatment-actinobacteria, fig.width=5, fig.height=3.5}
 # Narrow in on a specific group
 # Actinobacteriota - y: abundance, x: treatment, dot plot + boxplot
 phylum_df %>%
@@ -469,9 +482,42 @@ phylum_df %>%
   ggplot(aes(x = treatment, y = Abundance, 
              fill = treatment, color = treatment)) + 
   geom_boxplot(alpha = 0.5, outlier.shape = NA) + # outliers not plotted here in boxplot 
+  facet_wrap(year~treatment, scales = "free_x", ncol = 5) +
   geom_jitter() + 
   theme_bw() + 
   labs(title = "Actinobacteriota Phylum Abundance") + 
+  scale_color_manual(values = treatment_colors) + 
+  scale_fill_manual(values = treatment_colors) + 
+    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+          legend.position = "right")
+
+# Bacteroidota
+phylum_df %>%
+  dplyr::filter(Phylum == "Bacteroidota") %>%
+  # build the plot 
+  ggplot(aes(x = treatment, y = Abundance, 
+             fill = treatment, color = treatment)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) + # outliers not plotted here in boxplot 
+  facet_wrap(year~treatment, scales = "free_x", ncol = 5) +
+  geom_jitter() + 
+  theme_bw() + 
+  labs(title = "Bacteroidota Phylum Abundance") + 
+  scale_color_manual(values = treatment_colors) + 
+  scale_fill_manual(values = treatment_colors) + 
+    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+          legend.position = "right")
+
+# Acidobacteriota
+phylum_df %>%
+  dplyr::filter(Phylum == "Acidobacteriota") %>%
+  # build the plot 
+  ggplot(aes(x = treatment, y = Abundance, 
+             fill = treatment, color = treatment)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) + # outliers not plotted here in boxplot 
+  facet_wrap(year~treatment, scales = "free_x", ncol = 5) +
+  geom_jitter() + 
+  theme_bw() + 
+  labs(title = "Acidobacteriota Phylum Abundance") + 
   scale_color_manual(values = treatment_colors) + 
   scale_fill_manual(values = treatment_colors) + 
     theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
@@ -515,6 +561,7 @@ family_df %>%
   scale_fill_manual(values = treatment_colors) + 
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
         legend.position = "bottom")
+
 ```
 
 
@@ -534,6 +581,7 @@ family_df %>%
   scale_color_manual(values = treatment_colors) + 
   scale_fill_manual(values = treatment_colors) + 
   theme(axis.text.x = element_blank())
+
 ```
 
 
@@ -575,7 +623,35 @@ genus_df %>%
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
         legend.position = "bottom")
 
+# Acidobacteriota
+# Plot genus 
+genus_df %>%
+  dplyr::filter(Phylum == "Acidobacteriota") %>%
+  # build the plot 
+  ggplot(aes(x = treatment, y = Abundance, 
+             fill = treatment, color = treatment)) + 
+  facet_wrap(.~Genus) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) + # outliers not plotted here in boxplot 
+  geom_jitter() + 
+  theme_bw() + 
+  labs(title = "Acidobacteriota Genus Abundance") + 
+  scale_color_manual(values = treatment_colors) + 
+  scale_fill_manual(values = treatment_colors) + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+        legend.position = "bottom")
+
 ```
+
+#Conclusion:
+In this entire project, I learnt a lot with quality checking, preprocessing data, making phylogenetic tree and performing community analysis. From the data set, I was working on, key things that I observed was:
+1. Distinction between samples collected in 1st and 5th year when compared the final year i.e; 10th.
+2. The analysis performed linked back to the findings of the authors as shown by relative richness plot:
+  a. Acidobacteria: Decreased in all the treatments from 1st to 10th year.
+  b. Actinobacteria: Increased in all the treatments from 1st to 10th year.
+  c. Bacteroidota: Decreased in all the treatments from 1st to 10th year.
+  d. Patescibacteria: Decreased in all the treatments from 1st to 10th year.
+  
+The results show the effect of long term N fertilizer application in wheat led to decrease in most of the dominant soil bacterial species.
 
 
 # Session Information 

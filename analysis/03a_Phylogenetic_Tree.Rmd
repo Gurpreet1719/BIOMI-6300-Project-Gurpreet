@@ -115,6 +115,8 @@ pwd
 echo "The working directory is $PWD"
 ```
 
+#Conclusion:
+In this file, I learnt how to create ASV fasta file from the phyloseq object and create our alignment in MAFFT.
 
 # Session Information
 ```{r session-info}

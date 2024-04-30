@@ -127,6 +127,9 @@ ggtree(midroot_physeq) +
 save(list = c("unrooted_physeq", "midroot_physeq"),
      file = "data/03_Phylogenetic_Tree/phytree_preprocessed_physeq.RData")
 ```
+ 
+#Conclusion:
+The unrooted tree from my dataset did not show any long branches. But it was good learn how proceed with both the cases if I incounter them in future.
 
 # Session Information 
 ```{r session-info}

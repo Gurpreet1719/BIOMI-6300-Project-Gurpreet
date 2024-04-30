@@ -260,6 +260,10 @@ save(raw_preprocessed_physeq,
      file = "data/02_PreProcessing/raw_preprocessed_physeq.RData")
 ```
 
+
+#Conclusion of this file:
+In this file I learnt about making a phyloseq object and processing our data into it. Also, I learnt that we have to remove chloroplasts and mitochondria from our data. My data set did not have information about mock communities and negative control samples. It is also important to remove samples without enough reads.
+
 # Session Information 
 ```{r session-info}
 # Ensure reproducibility 

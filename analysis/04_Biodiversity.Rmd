@@ -211,17 +211,25 @@ iNEXT_manual_df %>%
 ```
 
 **Interpretation**
-From the plots above,
+
+Order q of:  
+
+  - 0 = Richness/ Number of Total taxa
+  - 1 = Exponential Shannon / Number of "Common" taxa
+  - 2 = Inverse Simpson / Number of "Dominant" taxa 
+  
+From the plots above, For richness, the effective number of ASVs were in the order of  N360 > N240 > N0 > N120 > N180.  Effective number of ASVs changed a little bit cpmaring the treatments from Richness to Shannon to Simpson.
 
 Richness > Shannon > Simpson
 
-The effective number of ASVs were higher for N0-5, N120-5, N180-1, N240-5 and N360-1. Similar trend was observed for Shannon and Simpson diversity index. The richness measure of diversity is more sensitive to sequencing depth and compared to Shannon and Simpson indices. Since, this plot was plotted was manually plotted, the axes were different for each of the diversity measure and it seems that the curves plateaued as: Simpson > Shannon > Richness.
+Since, this plot was plotted was manually plotted, the axes were different for each of the diversity measure and it seems that the curves plateaued as: Simpson > Shannon > Richness.
 
-
+Other things that we note from these figures is that, as q increases from 0 to 1 to 2, the abundance of the species is weighted more, so the rarefaction curve plateaus earlier. 
+Most of the sample rarefaction curves appear to plateau but we need to look deeper.  
 
 # Boxplots of Diversity 
 
-Now, let's zoom in on a bit of a better view of the data by visualizing it in a boxplot...  
+Now, let's zoom in on a bit of a better view of the data by visualizing it in a boxplot.  
 
 ```{r div-dfs}
 # Prettier station labels 
@@ -259,4 +267,34 @@ obs_div_df %>%
 ```
 
 **Interpretation**
-The treatment that had the highest effective number of ASVs was N240 after 5 years of application whereas the lowest was N0 in the first year of application. One interesting thing that I observed for the Simpson measure was the trend in N360 being 1st yr > 10th yr > 5th year which different than that observed for richness and Shannon measure as : 1st yr > 5th yr > 10th.
+For richness, the effective number of ASVs were higher for N120, N0 and N360.  Effective number of ASVs changed a little bit from Richness to Shannon to Simpson. One thing to note is that the scales are also different for all of the three ut in general, the the effective number of ASVs decreased from Richness to Shannon to Simpson. The richness measure of diversity is more sensitive to sequencing depth and compared to Shannon and Simpson indices.
+
+
+
+# Diversity vs year of sampling
+
+```{r div-vs-year, fig.height=3.5, fig.width=6}
+
+iNEXT_manual_df %>%
+  dplyr::filter(Method == "Observed") %>%
+  ggplot(aes(x = year, y = treatment )) + 
+  facet_wrap(.~Order.q, scales = "free") + 
+  geom_point(aes(color = treatment)) + 
+  stat_smooth(method = "lm", formula = y ~poly(x, 2)) + 
+  labs(x = "Treatments", y = "# of ASVs") + 
+  scale_color_manual(values = treatment_colors) + 
+  theme_bw() + 
+  theme(legend.position = "bottom",
+        legend.title = element_blank()) 
+```
+
+Comparing years of sampling with diversity seemed most interesting to me. But quite don not know how to interpret it. Will try different options with this. There were other relationships of the bacterial species with soil properties. Since that data wasnot included in the data set, I can explore these properties when working on my own PhD data.
+
+#Conclusion:
+
+In this file, I learnt how to plot rarefaction curves both manually and with iNEXT. It is interesting to how different indices look like when plotted. 
+
+# Session Information
+```{r session-info}
+devtools::session_info()
+```
