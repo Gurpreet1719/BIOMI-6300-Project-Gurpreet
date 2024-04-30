@@ -158,40 +158,35 @@ Remove:
 2. mitochondria  
 
 ```{r rm-mitos-chloros}
-# Remind myself of tax table 
-#View(tax_mat)
+library(dplyr)
 
 # Make new physeq without chloroplasts
-noChloros_physeq <- 
-  raw_physeq %>% 
+noChloros_physeq <- raw_physeq %>%
   # rm chloroplasts
   subset_taxa(Order != "Chloroplast" | is.na(Order))
-  
-# How many taxa were chloroplasts? 
+
+# How many taxa were chloroplasts?
 num_chloro_ASVs <- ntaxa(raw_physeq) - ntaxa(noChloros_physeq)
 num_chloro_ASVs
 
-# Intuition chek 
-noChloros_physeq %>%
-  tax_table() %>%
-  data.frame() %>%
-# View()
+# Intuition check
+tax_table(noChloros_physeq) %>%
+  data.frame() 
 
-# remove mitochondria 
-noChlorosMitos_physeq <- 
-  noChloros_physeq %>%
+# Remove mitochondria
+noChlorosMitos_physeq <- noChloros_physeq %>%
   subset_taxa(Family != "Mitochondria" | is.na(Family))
 
-# How many mitochondrial ASVs? 
+# How many mitochondrial ASVs?
 num_mito_ASVs <- ntaxa(noChloros_physeq) - ntaxa(noChlorosMitos_physeq)
 num_mito_ASVs
 
-noChlorosMitos_physeq
-
-# How many total asvs were removed from chloros and mitos 
+# How many total ASVs were removed from chloros and mitos?
 ntaxa(raw_physeq) - ntaxa(noChlorosMitos_physeq)
-# proportion of asvs kept? 
-ntaxa(noChlorosMitos_physeq)/ntaxa(raw_physeq)
+
+# Proportion of ASVs kept?
+ntaxa(noChlorosMitos_physeq) / ntaxa(raw_physeq)
+
 ```
 
 # Evaulate and remove the control samples 
@@ -246,9 +241,9 @@ seqSums_df %>%
 min(sample_sums(noChlorosMitos_physeq))
 
 # Remove SRR11364374
-#raw_preprocessed_physeq <- 
-  #noChlorosMitos_physeq %>%
-  #subset_samples(., names != "SRR11364374")
+raw_preprocessed_physeq <- 
+  noChlorosMitos_physeq %>%
+  subset_samples(., names != "SRR11364374")
 
 #What's the new min seq depth?
 min(sample_sums(raw_preprocessed_physeq))

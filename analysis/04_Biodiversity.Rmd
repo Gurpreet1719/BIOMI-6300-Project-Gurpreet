@@ -292,7 +292,7 @@ Comparing years of sampling with diversity seemed most interesting to me. But qu
 
 #Conclusion:
 
-In this file, I learnt how to plot rarefaction curves both manually and with iNEXT. It is interesting to how different indices look like when plotted. 
+In this file, I learnt how to plot rarefaction curves both manually and with iNEXT. It is interesting to see how different indices look like when plotted. 
 
 # Session Information
 ```{r session-info}

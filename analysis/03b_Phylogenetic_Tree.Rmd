@@ -129,7 +129,7 @@ save(list = c("unrooted_physeq", "midroot_physeq"),
 ```
  
 #Conclusion:
-The unrooted tree from my dataset did not show any long branches. But it was good learn how proceed with both the cases if I incounter them in future.
+The unrooted tree from my dataset did not show any long branches. But it was good learn how proceed with both the cases if I encounter them in future.
 
 # Session Information 
 ```{r session-info}

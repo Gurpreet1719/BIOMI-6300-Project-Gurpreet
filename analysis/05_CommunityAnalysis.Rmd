@@ -2,7 +2,7 @@
 title: "Between Sample (Beta) Diversity of Microbes along a Salinity Gradient"
 author: "Gurpreet Kaur"
 date: "`r Sys.Date()`"
-output: html_documentoutput:
+output:
   html_document: 
     code_folding: show
     theme: spacelab
@@ -469,8 +469,8 @@ phylum_df %>%
   labs(title = "Phylum Composition") + 
   scale_fill_manual(values = phylum_colors) + 
   theme_bw() + 
-  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
-        strip.text.y = element_text(size = 10 )) 
+  theme(axis.text.x = element_text( hjust = 1, vjust = 1),
+        strip.text.y = element_text(angle = 360,  size = 10 )) 
 ```
 
 ```{r phylum-treatment-actinobacteria, fig.width=5, fig.height=3.5}
@@ -528,8 +528,8 @@ phylum_df %>%
 ```{r family-composition, fig.width=10, fig.height=4}
 # Calculate the Family relative abundance 
 # Note: The read depth MUST be normalized in some way: scale_reads
-family_df <- 
-  scaled_rooted_physeq %>%
+
+family_df <- scaled_rooted_physeq %>%
   # agglomerate at the phylum level 
   tax_glom(taxrank = "Family") %>% 
   # Transform counts to relative abundance 
@@ -537,11 +537,10 @@ family_df <-
   # Melt to a long format 
   psmelt() %>%
   # Filter out Phyla that are <1% - get rid of low abundant Phyla
-  dplyr::filter(Abundance > 0.01)# %>%
-  mutate(date = fct_relevel(year, c("1", "5", "10")),
-         station = fct_relevel(treatment, c("N0", "N120",
-                                          "N180", "N240",
-                                          "N360")))
+  filter(Abundance > 0.01) %>%
+  mutate(date = factor(year, levels = c("1", "5", "10")),
+         station = factor(treatment, levels = c("N0", "N120", "N180", "N240", "N360")))
+
 # Check family_df
 #str(family_df)
 
