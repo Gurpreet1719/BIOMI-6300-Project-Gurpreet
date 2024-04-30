@@ -55,13 +55,13 @@ metadata_df <-
 
 head(metadata_df)
 
-# Setting colors for treatments
+# Setting colors for treatments to match with dataset from the paper
 treatment_colors <- c(
-  "N0" = "dodgerblue4",
-  "N120" = "brown3",
+  "N0" = "brown3",
+  "N120" = "dodgerblue4",
   "N180" = "darkolivegreen4",
-  "N240" = "deeppink4",
-  "N360" = "goldenrod4")
+  "N240" = "gold",
+  "N360" = "deeppink4")
 
 ```
 
@@ -130,7 +130,7 @@ iNEXT_color_df <-
   # Merge with colors for plotting with ggiNEXT
   left_join(data.frame(treatment_colors = treatment_colors,
                        treatment = names(treatment_colors))) %>%
-  mutate(treatment_colors = ifelse(is.na(treatment_colors), "red", treatment_colors))
+  mutate(treatment_colors = ifelse(is.na(treatment_colors), "green1", treatment_colors))
             # by = c("names" = "treatment"))  # Corrected variable name for joining
 
 ```
@@ -151,13 +151,14 @@ ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") +
  facet_wrap(~Order.q, scales = "fixed") + 
   scale_color_manual(values = iNEXT_color_df$treatment_colors, guide = FALSE) +
   scale_fill_manual(values = iNEXT_color_df$treatment_colors, guide = FALSE) +
-  scale_shape_manual(values = rep(1, 60), guide = FALSE)
+  scale_shape_manual(values = rep(1, 60), guide = FALSE) +
   # scale_shape_manual(values = base::rep(17, nsamples(raw_preprocessed_physeq)),
   #                  guide = TRUE) +
   labs(x = "Number of Sequences (Library Size)", 
        y = "Effective Number of ASVs") + 
   theme_bw() + 
   theme(legend.position = "none")
+  
 
 
 ```

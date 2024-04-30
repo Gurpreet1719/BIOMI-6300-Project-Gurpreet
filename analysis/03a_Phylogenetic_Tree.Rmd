@@ -23,7 +23,6 @@ set.seed(238427)
 ```
 
 
-
 ## Load Packages & Phyloseq Object
 ```{r load-environment}
 # phytools, ggtree, RColorBrewer
@@ -79,7 +78,6 @@ RANDOM=238427
 
 # Run Mafft 
 # To test in the shell directly from Rmd 
-# mac: command + option + enter 
 # Windows: control + alt + enter 
 # For now, use default options, note the version 
 # MAFFT automatically knows that it's a nucleotide alignment 

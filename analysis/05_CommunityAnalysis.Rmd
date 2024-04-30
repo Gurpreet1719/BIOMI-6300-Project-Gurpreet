@@ -53,11 +53,11 @@ pacman::p_load(tidyverse, devtools, phyloseq, patchwork, vegan,
 
 # Setting colors for treatments
 treatment_colors <- c(
-  "N0" = "dodgerblue4",
-  "N120" = "brown3",
+  "N0" = "brown3",
+  "N120" = "dodgerblue4",
   "N180" = "darkolivegreen4",
-  "N240" = "deeppink4",
-  "N360" = "goldenrod4")
+  "N240" = "goldenrod4",
+  "N360" = "deeppink4")
 ```
 
 
@@ -180,7 +180,7 @@ scaled_TotalSeqs_df %>%
   ggplot(aes(x = TotalSeqs)) + 
   geom_histogram(bins = 50) + 
   scale_x_continuous(limits = c(0, 50000)) + 
-  labs(title = "Scaled Sequencing Depth at 10137") + 
+  labs(title = "Scaled Sequencing Depth at 17422") + 
   theme_classic()
 ```
 
@@ -206,15 +206,29 @@ soren_treatment_pcoa <- plot_ordination(
   physeq = scaled_rooted_physeq,
   ordination = scaled_soren_pcoa,
   color = "treatment",
- # shape = "sample_type",
+  shape = "year",
   title = "Sorensen PCoA") +
   geom_point(size=5, alpha = 0.5, aes(color = treatment)) +
-  #scale_shape_manual(values = c(15,16,17,18, 19, 20)) +
   scale_color_manual(values = treatment_colors) + 
   theme_bw()
 # Show the plot 
 soren_treatment_pcoa
 ```
+
+Here, I am evaluating the shared taxa by presence/absence (abundance-unweighted) in the Sorensen metric. 
+
+- Axis 1 = ~12.2% of variation  
+- Axis 2 = ~10% of variation 
+
+This means a total of 30% variation in the data in these two axes. Axis 1 showed three distinct clusters from
+1. N0 at the bottom from 1st and 5th years 
+2. Microbial taxa from N120, N240 and N360 in the middle 
+3. Microbial taxa from N180 in the 5th year
+
+Axis 2 showed three distinct clusters from
+1.N0
+2.N120 
+3.N180, N240 and N360
 
 
 ### Bray
@@ -232,14 +246,22 @@ bray_treatment_pcoa <-
     physeq = scaled_rooted_physeq,
     ordination = scaled_BC_pcoa,
     color = "treatment",
-    #shape = "treatment",
+    shape = "year",
     title = "Bray-Curtis PCoA") +
   geom_point(size=5, alpha = 0.5, aes(color = treatment)) +
-  #scale_shape_manual(values = c(15,16,17,18, 19, 20)) +
   scale_color_manual(values = c(treatment_colors)) + 
   theme_bw()
 bray_treatment_pcoa
 ```
+
+From the Bray-curtis analysis:
+
+- Axis 1 = ~13% of variation  
+- Axis 2 = ~18% of variation 
+
+This means that this analysis explains 31% of the variation in the data in these two axes, which is more than the previous plot with the Sorensen Dissimilarity. Abundance does seem to have an influence!!
+
+Samples are now separated opposite to how they were separated in Sorenson.
 
 
 ### Weighted Unifrac
@@ -258,52 +280,20 @@ wUNI_treatment_pcoa <-
     physeq = scaled_rooted_physeq,
     ordination = scaled_wUNI_pcoa,
     color = "treatment",
-    shape = "treatment",
+    shape = "year",
     title = "Weighted Unifrac PCoA") +
   geom_point(size=5, alpha = 0.5, aes(color = treatment)) +
-  scale_shape_manual(values = c(15,16,17,18, 19, 20)) +
   scale_color_manual(values = c(treatment_colors)) + 
   theme_bw()
 wUNI_treatment_pcoa
 ```
 
+Here, I am evaluating the shared taxa and then weighting them by their abundances, which provides more influence for species that are more abundant.    
 
-## Combine PCoAs
+- Axis 1 = ~34% of variation  
+- Axis 2 = ~27% of variation 
 
-Let's plot all three together into one plot to have a concise visualization of the three metrics. 
-```{r pcoa-together, fig.width=8, fig.height=3.5}
-(soren_station_pcoa + theme(legend.position = "none")) + 
-  (bray_station_pcoa + theme(legend.position = "none")) + 
-    (wUNI_station_pcoa + theme(legend.position = "none"))
-```
-
-## NMDS 
-
-### Weighted Unifrac
-
-Since we did 3 of the dissimilarity metrics for the PCoA, let's just plot one example of them for the NMDS plotting. Here, we will use weighted Unifrac 
-```{r wUnifrac-NMDS}
-# Calculate the Weighted Unifrac distance
-scaled_wUNI_nmds <- 
-  ordinate(
-    physeq = scaled_rooted_physeq,
-    method = "NMDS",
-    distance = "wunifrac")
-
-# Plot the PCoA
-wUNI_treatment_nmds <- 
-  plot_ordination(
-    physeq = scaled_rooted_physeq,
-    ordination = scaled_wUNI_nmds,
-    color = "treatment",
-    shape = "treatment",
-    title = "Weighted Unifrac NMDS") +
-  geom_point(size=5, alpha = 0.5, aes(color = treatment)) +
-  scale_shape_manual(values = c(15,16,17,18, 19, 20)) +
-  scale_color_manual(values = c(treatment_colors)) + 
-  theme_bw()
-wUNI_treatment_nmds
-```
+This means we explain *61*% of the variation in the data in these two axes, which is significantly more than the previous plots with the taxonomic dissimilarity measures. This plots shows two distinct clusters in both the axes, axis 2 showing all the samples form 10th year and axis 1 showing all the samples from all treatments in 1st and 5th year.
 
 ## Combine PCoAs
 
@@ -333,20 +323,22 @@ wUNI_treatment_nmds <-
     physeq = scaled_rooted_physeq,
     ordination = scaled_wUNI_nmds,
     color = "treatment",
-    shape = "treatment",
+    shape = "year",
     title = "Weighted Unifrac NMDS") +
   geom_point(size=5, alpha = 0.5, aes(color = treatment)) +
-  #scale_shape_manual(values = c(15,16,17,18, 19, 20)) +
   scale_color_manual(values = c(treatment_colors)) + 
   theme_bw()
 wUNI_treatment_nmds
 ```
 
+
+
 ```{r combined-wUnifrac, fig.width=6, fig.height=3.5}
-(wUNI_station_pcoa + theme(legend.position = "none")) + 
-  (wUNI_station_nmds + theme(legend.position = "none"))
+(wUNI_treatment_pcoa + theme(legend.position = "none")) + 
+  (wUNI_treatment_nmds + theme(legend.position = "none"))
 ```
 
+PCoA shows more variability as compared to NMDS.
 
 # Statistical Significance Testing 
 
@@ -366,9 +358,9 @@ metadata <- data.frame(sample_data(scaled_rooted_physeq))
 # In this example we are testing the hypothesis that the five stations
 # that were collected have different centroids in the ordination space 
 # for each of the dissimilarity metrics, we are using a discrete variable 
-adonis2(scaled_sorensen_dist ~ station, data = metadata)
-adonis2(scaled_bray_dist ~ station, data = metadata)
-adonis2(scaled_wUnifrac_dist ~ station, data = metadata)
+adonis2(scaled_sorensen_dist ~ treatment, data = metadata)
+adonis2(scaled_bray_dist ~ treatment, data = metadata)
+adonis2(scaled_wUnifrac_dist ~ treatment, data = metadata)
 ```
 
 
@@ -376,11 +368,11 @@ adonis2(scaled_wUnifrac_dist ~ station, data = metadata)
 # We might also care about other variables
 # Here, we will add date and fraction as variables
 # multiplicative model ORDER MATTERS! 
-adonis2(scaled_sorensen_dist ~ station * date * fraction, data = metadata)
-adonis2(scaled_bray_dist ~ station * date * fraction, data = metadata)
+adonis2(scaled_sorensen_dist ~ treatment*year, data = metadata)
+adonis2(scaled_bray_dist ~ treatment*year, data = metadata)
 # Note that the ORDER MATTERS!
-adonis2(scaled_wUnifrac_dist ~ station * date * fraction, data = metadata)
-adonis2(scaled_wUnifrac_dist ~ date * station * fraction, data = metadata)
+adonis2(scaled_wUnifrac_dist ~ treatment*year, data = metadata)
+adonis2(scaled_wUnifrac_dist ~ year*treatment, data = metadata)
 ```
 
 We can also run tests that include additive (+) or multipliciatve models, which include the interaction term between variables. 
@@ -391,19 +383,200 @@ The PERMANOVA is sensitive to variance/dispersion in the data. Therefore, we nee
 ```{r betadispR}
 # Homogeneity of Disperson test with beta dispr
 # Sorensen 
-beta_soren_station <- betadisper(scaled_sorensen_dist, metadata$station)
-permutest(beta_soren_station)
+beta_soren_treatment <- betadisper(scaled_sorensen_dist, metadata$treatment)
+permutest(beta_soren_treatment)
 
 # Bray-curtis 
-beta_bray_station <- betadisper(scaled_bray_dist, metadata$station)
-permutest(beta_bray_station)
+beta_bray_treatment <- betadisper(scaled_bray_dist, metadata$treatment)
+permutest(beta_bray_treatment)
 
 # Weighted Unifrac 
-beta_bray_station <- betadisper(scaled_wUnifrac_dist, metadata$station)
-permutest(beta_bray_station)
+beta_bray_treatment <- betadisper(scaled_wUnifrac_dist, metadata$treatment)
+permutest(beta_bray_treatment)
 ```
 
-Above, our variance is impacted by station. Therefore, we need to be very careful about what we conclude about our data. 
+# Taxonomic Composition
+
+## Phylum
+```{r phylum-colors}
+# Set the phylum colors
+phylum_colors <- c(
+  Acidobacteriota = "navy", 
+  Actinobacteriota = "darkslategray2", 
+  Armatimonadota = "deeppink1",
+  Alphaproteobacteria = "plum2", 
+  Bacteroidota = "gold", 
+  Bacteroidetes = "turquoise",
+  Betaproteobacteria = "plum1", 
+  Bdellovibrionota = "red1",
+  Chloroflexi="black", 
+  Crenarchaeota = "firebrick",
+  Cyanobacteria = "limegreen",
+  Deltaproteobacteria = "grey", 
+  Desulfobacterota="magenta",
+  Firmicutes = "#3E9B96",
+  Gammaproteobacteria = "greenyellow",
+  Gammatimonadetes = "khaki1",
+  Myxococcota = "#B5D6AA",
+  Nitrospirota = "palevioletred1",
+  Nitrospirae = "lavender",
+  Proteobacteria = "royalblue",
+  Planctomycetota = "darkorange",
+  Patescibacteria = "yellow",
+  Thermoplasmatota = "green",
+  Verrucomicrobiota = "darkorchid1",
+  other = "grey")
+```
+
+```{r phylum-composition}
+# Calculate the phylum relative abundance 
+# Note: The read depth MUST be normalized in some way: scale_reads
+phylum_df <- 
+  scaled_rooted_physeq %>%
+  # agglomerate at the phylum level 
+  tax_glom(taxrank = "Phylum") %>% 
+  # Transform counts to relative abundance 
+  transform_sample_counts(function (x) {x/sum(x)}) %>%
+  # Melt to a long format 
+  psmelt() %>%
+  # Filter out Phyla that are <1% - get rid of low abundant Phyla
+  dplyr::filter(Abundance > 0.01) %>%
+  # fix the order of date
+  mutate(date = fct_relevel(year, c("1", "5", "10")),
+         station = fct_relevel(treatment, c("N0", "N120",
+                                          "N180", "N240",
+                                          "N360")))
+
+
+# Stacked Bar Plot With All phyla 
+# Plot Phylum Abundances - make sure to load phylum_colors 
+phylum_df %>%
+  ggplot(aes(x = names, y = Abundance, fill = Phylum)) + 
+  facet_wrap(year~treatment, scales = "free_x", ncol = 5) + 
+  geom_bar(stat = "identity", color = "black") + 
+  labs(title = "Phylum Composition") + 
+  scale_fill_manual(values = phylum_colors) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank())
+```
+
+```{r phylum-station-actinobacteria, fig.width=5, fig.height=3.5}
+# Narrow in on a specific group
+# Actinobacteriota - y: abundance, x: treatment, dot plot + boxplot
+phylum_df %>%
+  dplyr::filter(Phylum == "Actinobacteriota") %>%
+  # build the plot 
+  ggplot(aes(x = treatment, y = Abundance, 
+             fill = treatment, color = treatment)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) + # outliers not plotted here in boxplot 
+  geom_jitter() + 
+  theme_bw() + 
+  labs(title = "Actinobacteriota Phylum Abundance") + 
+  scale_color_manual(values = treatment_colors) + 
+  scale_fill_manual(values = treatment_colors) + 
+    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+          legend.position = "right")
+```
+
+## Family
+```{r family-composition, fig.width=10, fig.height=4}
+# Calculate the Family relative abundance 
+# Note: The read depth MUST be normalized in some way: scale_reads
+family_df <- 
+  scaled_rooted_physeq %>%
+  # agglomerate at the phylum level 
+  tax_glom(taxrank = "Family") %>% 
+  # Transform counts to relative abundance 
+  transform_sample_counts(function (x) {x/sum(x)}) %>%
+  # Melt to a long format 
+  psmelt() %>%
+  # Filter out Phyla that are <1% - get rid of low abundant Phyla
+  dplyr::filter(Abundance > 0.01)# %>%
+  mutate(date = fct_relevel(year, c("1", "5", "10")),
+         station = fct_relevel(treatment, c("N0", "N120",
+                                          "N180", "N240",
+                                          "N360")))
+# Check family_df
+#str(family_df)
+
+# Plot family 
+# Actinobacteriota Families 
+family_df %>%
+  dplyr::filter(Phylum == "Actinobacteriota") %>%
+  # build the plot 
+  ggplot(aes(x = treatment, y = Abundance, 
+             fill = treatment, color = treatment)) + 
+  facet_wrap(year~treatment, scales = "free_x", ncol = 5) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) + # outliers not plotted here in boxplot 
+  geom_jitter() + 
+  theme_bw() + 
+  labs(title = "Actinobacteriota Family Abundance") + 
+  scale_color_manual(values = treatment_colors) + 
+  scale_fill_manual(values = treatment_colors) + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+        legend.position = "bottom")
+```
+
+
+
+```{r plot-cyano-families, fig.width=8, fig.height=4}
+# Plot family 
+family_df %>%
+  dplyr::filter(Phylum == "Patescibacteria") %>%
+  # build the plot 
+  ggplot(aes(x = treatment, y = Abundance, 
+             fill = treatment, color = treatment)) + 
+  facet_wrap(.~treatment, scales = "free_x", nrow = 1) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) + # outliers not plotted here in boxplot 
+  geom_jitter() + 
+  theme_bw() + 
+  labs(title = "Patescibacteria Family Abundance") + 
+  scale_color_manual(values = treatment_colors) + 
+  scale_fill_manual(values = treatment_colors) + 
+  theme(axis.text.x = element_blank())
+```
+
+
+## Genus
+```{r genus-plots, fig.width=12, fig.height=4}
+# Calculate the Family relative abundance 
+# Note: The read depth MUST be normalized in some way: scale_reads
+genus_df <- 
+  scaled_rooted_physeq %>%
+  # agglomerate at the phylum level 
+  tax_glom(taxrank = "Genus") %>% 
+  # Transform counts to relative abundance 
+  transform_sample_counts(function (x) {x/sum(x)}) %>%
+  # Melt to a long format 
+  psmelt() %>%
+  # Filter out Phyla that are <1% - get rid of low abundant Phyla
+  dplyr::filter(Abundance > 0.01) %>%
+  # fix the order of date
+  mutate(date = fct_relevel(year, c("1", "5", "10")),
+         station = fct_relevel(treatment, c("N0", "N120",
+                                          "N180", "N240",
+                                          "N360")))
+
+
+# Actinobacteriota
+# Plot genus 
+genus_df %>%
+  dplyr::filter(Phylum == "Actinobacteriota") %>%
+  # build the plot 
+  ggplot(aes(x = treatment, y = Abundance, 
+             fill = treatment, color = treatment)) + 
+  facet_wrap(.~Genus) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) + # outliers not plotted here in boxplot 
+  geom_jitter() + 
+  theme_bw() + 
+  labs(title = "Actinobacteriota Genus Abundance") + 
+  scale_color_manual(values = treatment_colors) + 
+  scale_fill_manual(values = treatment_colors) + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+        legend.position = "bottom")
+
+```
+
 
 # Session Information 
 For reproducibility 

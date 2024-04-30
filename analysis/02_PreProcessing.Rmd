@@ -34,13 +34,13 @@ library(tidyverse)
 
 # Goals
 
-Here, we will process the data into a phyloseq object. 
+Here, I am working on processing the data into a phyloseq object. 
 
 - ASV table 
 - Taxonomy Table 
 - Track Reads (metadata)
 
-Then, we will remove the following: 
+Then, I will remove the following: 
 
 1. Remove Chloroplasts
 2. Remove Mitochondria. 
@@ -94,10 +94,6 @@ load("data/01_DADA2/track_read_counts.RData")
 head(track_counts_df)
 dim(track_counts_df)
 
-# Please in the terminal copy metadata.csv 
-# into: SalinityGradient_16S/data 
-# from: /workdir/in_class_data/SalinityGradient_16S/metadata.csv
-
 # Load in metadata
 metadata_df_old <- read.csv("data/metadata.csv")
 dim(metadata_df_old)
@@ -107,6 +103,7 @@ metadata_df <- separate(metadata_df_old, sample_type, into = c("treatment", "yea
 metadata_df
 metadata_df$year = factor(metadata_df$year, levels = c('1', '5', '10'))
 colnames(metadata_df)
+dim(metadata_df)
 
 
 # Merge metadata_df with track_reads_df 
@@ -175,9 +172,9 @@ num_chloro_ASVs <- ntaxa(raw_physeq) - ntaxa(noChloros_physeq)
 num_chloro_ASVs
 
 # Intuition chek 
-#noChloros_physeq %>%
-  #tax_table() %>%
-  #data.frame() %>%
+noChloros_physeq %>%
+  tax_table() %>%
+  data.frame() %>%
 # View()
 
 # remove mitochondria 
@@ -198,7 +195,7 @@ ntaxa(noChlorosMitos_physeq)/ntaxa(raw_physeq)
 ```
 
 # Evaulate and remove the control samples 
-My project data does not have control samples and mock community, so I am not following any of these steps.
+My project data does not have control samples and mock community, so I am not following any of these steps to remove them. I am moving directly to evaluate the sequencing depth.
 
 
 # Evaluate the Sequencing Depth 
@@ -233,12 +230,12 @@ seqSums_df %>%
 # plot it! 
 seqSums_df %>%
   ggplot(aes(x=reorder(names, TotalSeqs), y = TotalSeqs,
-             fill = sample_type)) + 
+             fill = treatment)) + 
   geom_bar(stat = "identity") 
 
 # Density plot 
 seqSums_df %>%
-  ggplot(aes(TotalSeqs, fill = sample_type)) +
+  ggplot(aes(TotalSeqs, fill = treatment)) +
   geom_density(alpha = 0.5)
 ```
 
@@ -248,10 +245,10 @@ seqSums_df %>%
 # What's the min seq depth? 
 min(sample_sums(noChlorosMitos_physeq))
 
-# Remove 20210615-MA-SCB2F
-raw_preprocessed_physeq <- 
-  noChlorosMitos_physeq %>%
-  subset_samples(., names != "20210615-MA-SCB2F")
+# Remove SRR11364374
+#raw_preprocessed_physeq <- 
+  #noChlorosMitos_physeq %>%
+  #subset_samples(., names != "SRR11364374")
 
 #What's the new min seq depth?
 min(sample_sums(raw_preprocessed_physeq))
@@ -268,4 +265,6 @@ save(raw_preprocessed_physeq,
 # Ensure reproducibility 
 devtools::session_info()
 ```
+
+
 
