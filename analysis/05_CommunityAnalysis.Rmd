@@ -363,6 +363,7 @@ adonis2(scaled_bray_dist ~ treatment, data = metadata)
 adonis2(scaled_wUnifrac_dist ~ treatment, data = metadata)
 ```
 
+We see that the most variation is explained by Bray-Curtis and Unifrac and also has the highest F-statistic.
 
 ```{r PERMANOVA-multiVariable}
 # We might also care about other variables
@@ -375,7 +376,8 @@ adonis2(scaled_wUnifrac_dist ~ treatment*year, data = metadata)
 adonis2(scaled_wUnifrac_dist ~ year*treatment, data = metadata)
 ```
 
-We can also run tests that include additive (+) or multipliciatve models, which include the interaction term between variables. 
+From here, we see that the highest F-statistic is observed in Unifrac and year of sample selections impacts our results. The interaction between treatment type and the year of sampling also impacts are results from microbial community analysis, which are shown further.
+
 
 ## BetaDispR
 
@@ -394,6 +396,8 @@ permutest(beta_bray_treatment)
 beta_bray_treatment <- betadisper(scaled_wUnifrac_dist, metadata$treatment)
 permutest(beta_bray_treatment)
 ```
+
+Here, we see that our variance if impacted by the treatment type.
 
 # Taxonomic Composition
 
@@ -469,7 +473,7 @@ phylum_df %>%
   labs(title = "Phylum Composition") + 
   scale_fill_manual(values = phylum_colors) + 
   theme_bw() + 
-  theme(axis.text.x = element_text( hjust = 1, vjust = 1),
+  theme(axis.text.x = element_text( hjust = 1, vjust = 1, size = 0.5),
         strip.text.y = element_text(angle = 360,  size = 10 )) 
 ```
 
