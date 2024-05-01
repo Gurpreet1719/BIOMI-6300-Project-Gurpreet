@@ -1,0 +1,55 @@
+---
+title: "Treatment colors and phylum colors"
+author: "Gurpreet Kaur"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Goals:
+This file contains color codes for treatment colors and phylum colors.
+
+
+#Treatment colors
+```{r treatment-colors}
+treatment_colors <- c(
+  "N0" = "brown3",
+  "N120" = "dodgerblue4",
+  "N180" = "darkolivegreen4",
+  "N240" = "gold",
+  "N360" = "deeppink4")
+```
+
+#Phylum colors
+```{r}
+phylum_colors <- c(
+  Acidobacteriota = "navy", 
+  Actinobacteriota = "darkslategray2", 
+  Armatimonadota = "deeppink1",
+  Alphaproteobacteria = "plum2", 
+  Bacteroidota = "gold", 
+  Bacteroidetes = "turquoise",
+  Betaproteobacteria = "plum1", 
+  Bdellovibrionota = "red1",
+  Chloroflexi="black", 
+  Crenarchaeota = "firebrick",
+  Cyanobacteria = "limegreen",
+  Deltaproteobacteria = "grey", 
+  Desulfobacterota="magenta",
+  Firmicutes = "#3E9B96",
+  Gammaproteobacteria = "greenyellow",
+  Gammatimonadetes = "khaki1",
+  Myxococcota = "#B5D6AA",
+  Nitrospirota = "palevioletred1",
+  Nitrospirae = "lavender",
+  Proteobacteria = "royalblue",
+  Planctomycetota = "darkorange",
+  Patescibacteria = "yellow",
+  Thermoplasmatota = "green",
+  Verrucomicrobiota = "darkorchid1",
+  other = "grey")
+```
+
