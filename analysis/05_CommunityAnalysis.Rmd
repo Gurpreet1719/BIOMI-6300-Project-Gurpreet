@@ -415,7 +415,7 @@ phylum_colors <- c(
   Betaproteobacteria = "plum1", 
   Bdellovibrionota = "red1",
   Chloroflexi="black", 
-  Crenarchaeota = "firebrick",
+  Gemmatimonadota = "firebrick",
   Cyanobacteria = "limegreen",
   Deltaproteobacteria = "grey", 
   Desulfobacterota="magenta",
@@ -430,6 +430,9 @@ phylum_colors <- c(
   Patescibacteria = "yellow",
   Thermoplasmatota = "green",
   Verrucomicrobiota = "darkorchid1",
+  Latescibacterota = "pink1",
+  Methylomirabilota = "springgreen2",
+  Fibrobacterota = "olivedrab",
   other = "grey")
 ```
 
@@ -474,7 +477,7 @@ phylum_df %>%
   labs(title = "Phylum Composition") + 
   scale_fill_manual(values = phylum_colors) + 
   theme_bw() + 
-  theme(axis.text.x = element_text( hjust = 1, vjust = 1, size = 0.5),
+  theme(axis.text.x = element_text( hjust = 1, vjust = 1, size = 10),
         strip.text.y = element_text(angle = 360,  size = 10 )) 
 ```
 
