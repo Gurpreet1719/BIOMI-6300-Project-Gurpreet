@@ -198,7 +198,7 @@ iNEXT_manual_df %>%
   # Now, let's draw the plot, be sure to group by the samples if using geom_line!
   ggplot(aes(x = m, y= qD, color = treatment, group = names)) + 
   geom_line() + 
-  # Facet with the station to see the samples better 
+  # Facet with the treatment to see the samples better 
   facet_grid(Order.q~treatment, scales = "free") + 
   scale_color_manual(values = treatment_colors) + 
   labs(x = "Number of Sequences (Library Size)", 
@@ -232,7 +232,7 @@ Most of the sample rarefaction curves appear to plateau but we need to look deep
 Now, let's zoom in on a bit of a better view of the data by visualizing it in a boxplot.  
 
 ```{r div-dfs}
-# Prettier station labels 
+# Prettier treatment labels 
 treatment_names <- c("N0", "N120", "N180", "N240","N360")
 
 names(treatment_names) <- c("N0", "N120", "N180", "N240","N360")
@@ -251,7 +251,7 @@ head(obs_div_df)
 
 
 ```{r div-boxplot, fig.height = 3.5, fig.width = 9}
-# Boxplots by station 
+# Boxplots by treatment
 obs_div_df %>%
   ggplot(aes(x = treatment_names, y = qD, fill = treatment, color = treatment)) + 
   facet_wrap(~Order.q, scales = "free") + 

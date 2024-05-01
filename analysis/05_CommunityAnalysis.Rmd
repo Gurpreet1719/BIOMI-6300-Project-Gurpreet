@@ -20,7 +20,8 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
-                      fig.path = "../figures/05_CommunityAnalysis")
+                      fig.path = "../figures/05_CommunityAnalysis/",
+                      fig.align = "center")
 ```
 
 # Goals 
@@ -367,7 +368,7 @@ We see that the most variation is explained by Bray-Curtis and Unifrac and also 
 
 ```{r PERMANOVA-multiVariable}
 # We might also care about other variables
-# Here, we will add date and fraction as variables
+# Here, we will add year and treatment as variables
 # multiplicative model ORDER MATTERS! 
 adonis2(scaled_sorensen_dist ~ treatment*year, data = metadata)
 adonis2(scaled_bray_dist ~ treatment*year, data = metadata)
@@ -445,9 +446,9 @@ phylum_df <-
   psmelt() %>%
   # Filter out Phyla that are <1% - get rid of low abundant Phyla
   dplyr::filter(Abundance > 0.01) %>%
-  # fix the order of date
-  mutate(date = fct_relevel(year, c("1", "5", "10")),
-         station = fct_relevel(treatment, c("N0", "N120",
+  # fix the order of year
+  mutate(year = fct_relevel(year, c("1", "5", "10")),
+        treatment = fct_relevel(treatment, c("N0", "N120",
                                           "N180", "N240",
                                           "N360")))
 
@@ -542,8 +543,8 @@ family_df <- scaled_rooted_physeq %>%
   psmelt() %>%
   # Filter out Phyla that are <1% - get rid of low abundant Phyla
   filter(Abundance > 0.01) %>%
-  mutate(date = factor(year, levels = c("1", "5", "10")),
-         station = factor(treatment, levels = c("N0", "N120", "N180", "N240", "N360")))
+  mutate(year = factor(year, levels = c("1", "5", "10")),
+         treatment = factor(treatment, levels = c("N0", "N120", "N180", "N240", "N360")))
 
 # Check family_df
 #str(family_df)
@@ -602,9 +603,9 @@ genus_df <-
   psmelt() %>%
   # Filter out Phyla that are <1% - get rid of low abundant Phyla
   dplyr::filter(Abundance > 0.01) %>%
-  # fix the order of date
-  mutate(date = fct_relevel(year, c("1", "5", "10")),
-         station = fct_relevel(treatment, c("N0", "N120",
+  # fix the order of year
+  mutate(year = fct_relevel(year, c("1", "5", "10")),
+         treatment = fct_relevel(treatment, c("N0", "N120",
                                           "N180", "N240",
                                           "N360")))
 

@@ -2071,7 +2071,7 @@ font-size: 0.95em;
 <span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>  <span class="co"># Now, let&#39;s draw the plot, be sure to group by the samples if using geom_line!</span></span>
 <span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> m, <span class="at">y=</span> qD, <span class="at">color =</span> treatment, <span class="at">group =</span> names)) <span class="sc">+</span> </span>
 <span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a>  <span class="co"># Facet with the station to see the samples better </span></span>
+<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a>  <span class="co"># Facet with the treatment to see the samples better </span></span>
 <span id="cb34-9"><a href="#cb34-9" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Order.q<span class="sc">~</span>treatment, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb34-10"><a href="#cb34-10" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> treatment_colors) <span class="sc">+</span> </span>
 <span id="cb34-11"><a href="#cb34-11" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Sequences (Library Size)&quot;</span>, </span>
@@ -2107,7 +2107,7 @@ curves appear to plateau but we need to look deeper.</p>
 <h1>Boxplots of Diversity</h1>
 <p>Now, let’s zoom in on a bit of a better view of the data by
 visualizing it in a boxplot.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># Prettier station labels </span></span>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># Prettier treatment labels </span></span>
 <span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>treatment_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;N0&quot;</span>, <span class="st">&quot;N120&quot;</span>, <span class="st">&quot;N180&quot;</span>, <span class="st">&quot;N240&quot;</span>,<span class="st">&quot;N360&quot;</span>)</span>
 <span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a></span>
 <span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a><span class="fu">names</span>(treatment_names) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;N0&quot;</span>, <span class="st">&quot;N120&quot;</span>, <span class="st">&quot;N180&quot;</span>, <span class="st">&quot;N240&quot;</span>,<span class="st">&quot;N360&quot;</span>)</span>
@@ -2199,7 +2199,7 @@ visualizing it in a boxplot.</p>
 ## 4     53369  31060  30696            51.20352  darkolivegreen4            N180
 ## 5     53369  31060  30696            51.20352  darkolivegreen4            N180
 ## 6     53369  31060  30696            51.20352  darkolivegreen4            N180</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># Boxplots by station </span></span>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># Boxplots by treatment</span></span>
 <span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>obs_div_df <span class="sc">%&gt;%</span></span>
 <span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> treatment_names, <span class="at">y =</span> qD, <span class="at">fill =</span> treatment, <span class="at">color =</span> treatment)) <span class="sc">+</span> </span>
 <span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Order.q, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span> </span>
