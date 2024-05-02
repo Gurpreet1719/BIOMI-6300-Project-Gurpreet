@@ -634,6 +634,8 @@ elapsed_time <- round((end_time - start_time), 3)
 elapsed_time
 ```
 
+#Conclusion
+Working on this file helped me understand how data looks before cleaning and after. I realized how important it is to work with different components of filter and trim function.
 
 # Session Information 
 ```{r session-info}
